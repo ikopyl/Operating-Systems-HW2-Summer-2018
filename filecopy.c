@@ -35,6 +35,18 @@ int main(int argc, char const *argv[])
     int fd2 = open(file2_path, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);        // 644
     check_for_errors(fd2, "File open error...");
 
+    char *buf = (char *) malloc(BUFF_MAX);
+    ssize_t bytes_read = 0;
+    ssize_t bytes_written = 0;
+
+    // relying on the fact that EOF is equivalent to FALSE
+    while ((bytes_read = read(fd1, buf, BUFF_MAX))) {
+        bytes_written = write(fd2, buf, bytes_read);
+        check_for_errors(bytes_written, "write error...");
+    }
+    check_for_errors(bytes_read, "read error...");
+
+    free(buf);
 
     int close_status = close(fd2);
     check_for_errors(close_status, "File close error...");

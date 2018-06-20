@@ -14,7 +14,8 @@
 
 
 void check_for_errors(ssize_t, const char*);
-
+int open_to_read(const char *);
+int open_to_write(const char *);
 size_t copy_file_contents(int, int);
 
 int main(int argc, char const *argv[])
@@ -30,12 +31,10 @@ int main(int argc, char const *argv[])
 
 
     char* file1_path = "/Users/ilya.kopyl/depot/git_home/csc415/homework_assignments/hw2/aaa.txt";
-    int fd1 = open(file1_path, O_RDONLY);
-    check_for_errors(fd1, "File open error...");
+    int fd1 = open_to_read(file1_path);
 
     char* file2_path = "/Users/ilya.kopyl/depot/git_home/csc415/homework_assignments/hw2/bbb.txt";
-    int fd2 = open(file2_path, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);        // 644
-    check_for_errors(fd2, "File open error...");
+    int fd2 = open_to_write(file2_path);
 
     size_t bytes_copied = copy_file_contents(fd1, fd2);
 
@@ -56,7 +55,23 @@ void check_for_errors(ssize_t signal_code, const char* error_message)
         perror(error_message);
 }
 
-size_t copy_file_contents(int source_fd, int target_fd)
+int open_to_read(const char *path)
+{
+    int fd = open(path, O_RDONLY);
+    check_for_errors(fd, "File open error...");
+
+    return fd;
+}
+
+int open_to_write(const char *path)
+{
+    int fd = open(path, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);        // 644
+    check_for_errors(fd, "File open error...");
+
+    return fd;
+}
+
+size_t copy_file_contents(const int source_fd, const int target_fd)
 {
     ssize_t bytes_read = 0;
     ssize_t bytes_written = 0;

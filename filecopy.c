@@ -58,10 +58,10 @@ void check_for_errors(ssize_t signal_code, const char* error_message)
 
 size_t copy_file_contents(int source_fd, int target_fd)
 {
-    char *buf = (char *) malloc(BUFF_MAX);
     ssize_t bytes_read = 0;
     ssize_t bytes_written = 0;
     size_t bytes_copied_total = 0;
+    char *buf = (char *) malloc(BUFF_MAX);
 
     // relying on the fact that EOF is equivalent to FALSE
     while ((bytes_read = read(source_fd, buf, BUFF_MAX))) {

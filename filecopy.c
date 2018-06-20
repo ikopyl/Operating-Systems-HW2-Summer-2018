@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
     check_for_errors(fd1, "File open error...");
 
     char* file2_path = "/Users/ilya.kopyl/depot/git_home/csc415/homework_assignments/hw2/bbb.txt";
-    int fd2 = open(file2_path, O_CREAT|O_WRONLY|O_TRUNC, 640);
+    int fd2 = open(file2_path, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);        // 644
     check_for_errors(fd2, "File open error...");
 
 

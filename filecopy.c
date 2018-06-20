@@ -5,11 +5,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <linux/limits.h>
-//You may also add more include directives as well.
 
 //THIS VALUE CANNOT BE CHANGED.
-//You should use this value when creating your buffer.
-// And also to limit the amount each read CAN do.
 #define BUFF_MAX 13
 #define USER_NAME "Ilya Kopyl"
 
@@ -24,17 +21,18 @@ int main(int argc, char const *argv[])
     char *file1_path = (char *) malloc(PATH_MAX);
     char *file2_path = (char *) malloc(PATH_MAX);
 
-	printf("Welcome to the File Copy Program by %s!\n", USER_NAME);
-	printf("Enter the name of the file to copy from:\n");
+    printf("Welcome to the File Copy Program by %s!\n", USER_NAME);
+    printf("Enter the name of the file to copy from:\n");
+
     int bytes_read = scanf("%s", file1_path);
     if (bytes_read <= 0)
         perror("Unable to scan the input...");
 
+    printf("Enter the name of the file to copy to:\n");
 
-	printf("Enter the name of the file to copy to:\n");
-	bytes_read = scanf("%s", file2_path);
-	if (bytes_read <= 0)
-	    perror("Unable to scan the input...");
+    bytes_read = scanf("%s", file2_path);
+    if (bytes_read <= 0)
+        perror("Unable to scan the input...");
 
     int fd1 = open_to_read(file1_path);
     free(file1_path);
@@ -50,9 +48,9 @@ int main(int argc, char const *argv[])
     close_status = close(fd1);
     check_for_errors(close_status, "File close error...");
 
-	printf("File Copy Successful, %lu bytes copied\n", bytes_copied);
+    printf("File Copy Successful, %lu bytes copied\n", bytes_copied);
 
-	return 0;
+    return 0;
 }
 
 void check_for_errors(ssize_t signal_code, const char* error_message)

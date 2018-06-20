@@ -15,7 +15,7 @@
 
 void check_for_errors(ssize_t, const char*);
 
-size_t copy_file_contents(int *, int *);
+size_t copy_file_contents(int, int);
 
 int main(int argc, char const *argv[])
 {
@@ -37,7 +37,7 @@ int main(int argc, char const *argv[])
     int fd2 = open(file2_path, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);        // 644
     check_for_errors(fd2, "File open error...");
 
-    size_t bytes_copied = copy_file_contents(&fd1, &fd2);
+    size_t bytes_copied = copy_file_contents(fd1, fd2);
 
     int close_status = close(fd2);
     check_for_errors(close_status, "File close error...");
@@ -56,7 +56,7 @@ void check_for_errors(ssize_t signal_code, const char* error_message)
         perror(error_message);
 }
 
-size_t copy_file_contents(int *source_fd, int *target_fd)
+size_t copy_file_contents(int source_fd, int target_fd)
 {
     char *buf = (char *) malloc(BUFF_MAX);
     ssize_t bytes_read = 0;
@@ -64,8 +64,8 @@ size_t copy_file_contents(int *source_fd, int *target_fd)
     size_t bytes_copied_total = 0;
 
     // relying on the fact that EOF is equivalent to FALSE
-    while ((bytes_read = read(*source_fd, buf, BUFF_MAX))) {
-        bytes_written = write(*target_fd, buf, (size_t) bytes_read);
+    while ((bytes_read = read(source_fd, buf, BUFF_MAX))) {
+        bytes_written = write(target_fd, buf, (size_t) bytes_read);
         check_for_errors(bytes_written, "write error...");
         bytes_copied_total += bytes_written;
     }

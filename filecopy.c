@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <linux/limits.h>
 //You may also add more include directives as well.
 
 //THIS VALUE CANNOT BE CHANGED.
@@ -20,21 +21,26 @@ size_t copy_file_contents(int, int);
 
 int main(int argc, char const *argv[])
 {
+    char *file1_path = (char *) malloc(PATH_MAX);
+    char *file2_path = (char *) malloc(PATH_MAX);
+
 	printf("Welcome to the File Copy Program by %s!\n", USER_NAME);
 	printf("Enter the name of the file to copy from:\n");
+    int bytes_read = scanf("%s", file1_path);
+    if (bytes_read <= 0)
+        perror("Unable to scan the input...");
 
-	// TO DO
 
 	printf("Enter the name of the file to copy to:\n");
+	bytes_read = scanf("%s", file2_path);
+	if (bytes_read <= 0)
+	    perror("Unable to scan the input...");
 
-	// TO DO
-
-
-    char* file1_path = "/Users/ilya.kopyl/depot/git_home/csc415/homework_assignments/hw2/aaa.txt";
     int fd1 = open_to_read(file1_path);
+    free(file1_path);
 
-    char* file2_path = "/Users/ilya.kopyl/depot/git_home/csc415/homework_assignments/hw2/bbb.txt";
     int fd2 = open_to_write(file2_path);
+    free(file2_path);
 
     size_t bytes_copied = copy_file_contents(fd1, fd2);
 

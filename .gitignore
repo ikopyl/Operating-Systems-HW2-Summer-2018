@@ -54,3 +54,6 @@ dkms.conf
 # Ignoring the CLion auxiliary directories:
 cmake-build-debug
 .idea
+
+# Ignoring the compiled program
+fc

@@ -25,31 +25,16 @@ int main(int argc, char const *argv[])
     printf("Welcome to the File Copy Program by %s!\n", USER_NAME);
     printf("Enter the name of the file to copy from:\n");
 
-    int bytes_read = scanf("%s", file1_path);
-    if (bytes_read <= 0) {
-        perror("Unable to scan the input...");
-        exit(errno);
-    }
+    scanf("%s", file1_path);
+    int is_file_found = access(file1_path, F_OK);
+    check_for_errors(is_file_found, "File does not exist...");
 
-    int file_exist = access(file1_path, F_OK);
-    if (file_exist < 0) {
-        perror("File does not exist...");
-        exit(errno);
-    }
-
-    int file_ok_to_read_from = access(file1_path, R_OK);
-    if (file_ok_to_read_from < 0) {
-        perror("No permissions to read from file...");
-        exit(errno);
-    }
+    int is_file_ok_to_read_from = access(file1_path, R_OK);
+    check_for_errors(is_file_ok_to_read_from, "No permissions to read from file...");
 
     printf("Enter the name of the file to copy to:\n");
 
-    bytes_read = scanf("%s", file2_path);
-    if (bytes_read <= 0) {
-        perror("Unable to scan the input...");
-        exit(errno);
-    }
+    scanf("%s", file2_path);
 
     int fd1 = open_to_read(file1_path);
     free(file1_path);

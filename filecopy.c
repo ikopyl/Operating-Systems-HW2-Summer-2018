@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <linux/limits.h>
+#include <errno.h>
 
 //THIS VALUE CANNOT BE CHANGED.
 #define BUFF_MAX 13
@@ -25,14 +26,30 @@ int main(int argc, char const *argv[])
     printf("Enter the name of the file to copy from:\n");
 
     int bytes_read = scanf("%s", file1_path);
-    if (bytes_read <= 0)
+    if (bytes_read <= 0) {
         perror("Unable to scan the input...");
+        exit(errno);
+    }
+
+    int file_exist = access(file1_path, F_OK);
+    if (file_exist < 0) {
+        perror("File does not exist...");
+        exit(errno);
+    }
+
+    int file_ok_to_read_from = access(file1_path, R_OK);
+    if (file_ok_to_read_from < 0) {
+        perror("No permissions to read from file...");
+        exit(errno);
+    }
 
     printf("Enter the name of the file to copy to:\n");
 
     bytes_read = scanf("%s", file2_path);
-    if (bytes_read <= 0)
+    if (bytes_read <= 0) {
         perror("Unable to scan the input...");
+        exit(errno);
+    }
 
     int fd1 = open_to_read(file1_path);
     free(file1_path);
@@ -55,8 +72,10 @@ int main(int argc, char const *argv[])
 
 void check_for_errors(ssize_t signal_code, const char* error_message)
 {
-    if (signal_code < 0)
+    if (signal_code < 0) {
         perror(error_message);
+        exit(errno);
+    }
 }
 
 int open_to_read(const char *path)

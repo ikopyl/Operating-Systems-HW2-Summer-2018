@@ -4,12 +4,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <linux/limits.h>
+//#include <linux/limits.h>     // not sure if win10 linux subsystem would have this...
 #include <errno.h>
 
 //THIS VALUE CANNOT BE CHANGED.
 #define BUFF_MAX 13
 #define USER_NAME "Ilya Kopyl"
+#define PATH_MAX 4096           // ... so, here is a more cross-platform solution
 
 
 void check_for_errors(ssize_t, const char*);
